@@ -2,8 +2,6 @@
 #define QUEUE_SRINIVASGOWDA_HPP
 
 #include <iostream>                     // Include the I/O stream library
-#include <ctime>                        // Include the ctime library
-#include <random>                       // Include the random library
 #include <stdexcept>                    // Include the exception library
 
 using namespace std;                    // Correct syntax to use the std namespace

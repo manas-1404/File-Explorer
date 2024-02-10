@@ -38,13 +38,18 @@ template<typename T> class LinkedList{
 private:
     int count;
     Node<T>* head;
-    Node<T>* tail;
+    // Node<T>* tail;
 
 public:
     LinkedList(){
         int count = 0;
         head = nullptr;
         // tail = nullptr;
+    }
+
+    //Method which will return the head of the linkedlist. const because we don't want to change any data structure of the returned pointer
+    Node<T>* getHead() const{
+        return head;
     }
 
 
@@ -121,10 +126,10 @@ public:
     }
 
     void sortedInsert(){
-        
+
     }
 
-    //Method which will return count of number of data in Node
+    //Method which will return count of number of data in LinkedList
     int getCurrentSize(){
         return count;                                           //return the count of number of data in Node
     }

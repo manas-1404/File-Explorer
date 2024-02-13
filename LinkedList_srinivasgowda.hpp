@@ -1,6 +1,8 @@
 #ifndef LINKEDLIST_SRINIVASGOWDA_HPP
 #define LINKEDLIST_SRINIVASGOWDA_HPP
 
+#include "FileSystem_srinivasgowda.h"
+
 //Declaring a templated Class Node
 template<typename T> class Node {
 
@@ -50,6 +52,10 @@ public:
     //Method which will return the head of the linkedlist. const because we don't want to change any data structure of the returned pointer
     Node<T>* getHead() const{
         return head;
+    }
+
+    string getFileNameData(){
+
     }
 
 
@@ -125,8 +131,26 @@ public:
         count--;                                                //decreasing count by 1 because we removed a Node
     }
 
-    void sortedInsert(){
+    //might have errors
+    void sortedInsert(T data){
+        Node<T>* newNode = new Node(data);
+        string newFileName = data->getFileName();
+        string nodeFileName = head->getData()->getFileName();
 
+        if(head == nullptr || nodeFileName >= newFileName){
+            newNode->setNext(head);
+            head = newNode;
+        }else{
+            Node<T>* temp = head;
+
+            while(temp->getNext() != nullptr && nodeFileName < newFileName){
+                temp = temp->getNext();
+            }
+
+            newNode->setNext(temp->getNext());
+            temp->setNext(newNode);
+            
+        }
     }
 
     //Method which will return count of number of data in LinkedList

@@ -28,6 +28,10 @@ public:
         indexList.add(index);
     }
 
+    void removeBlock(int index){
+        indexList.remove(index);
+    }
+
     int fileSize(){
         return indexList.getCurrentSize();
     }
@@ -84,15 +88,51 @@ public:
         Node<File*>* temp = files.getHead();
         while(temp != nullptr){
             if(temp->getData()->getFileName() == name){
-                vector<int> indexToDelete = temp->getData()->getFileBlocks();
+                vector<int> indexesToDelete = temp->getData()->getFileBlocks();
 
-                for(int i = 0; i < indexToDelete.size(); i++){
+                int indexHardDrive;
+
+                //For loop to access each and every index in the LinkedList
+                for(int i = 0; i < indexesToDelete.size(); i++){
+                    indexHardDrive = indexesToDelete[i];
                     
+                    hardDrive[indexHardDrive] = ' ';
+
+                    blocksAvailable.enqueue(indexHardDrive);
+
+                    //deleting the indexList (LinkedList stored in the File Object)
+                    temp->getData()->removeBlock(indexHardDrive);
                 }
 
+                //deletes the file object
                 files.remove(temp->getData());
             }
+
+            temp = temp->getNext();
         }
+    }
+
+    string readFile(string name){
+        Node<File*>* temp = files.getHead();
+
+        string text = "";
+
+        int indexHardDrive;
+        while(temp != nullptr){
+            if(temp->getData()->getFileName() == name){
+                vector<int> indexesToRead = temp->getData()->getFileBlocks();
+
+                for(int i = 0; i < indexesToRead.size(); i++){
+                    indexHardDrive = indexesToRead[i];
+                    text = text + hardDrive[indexHardDrive];
+                }
+
+            }
+
+            temp = temp->getNext();
+        }
+
+        return text;
     }
 
 };

@@ -54,9 +54,9 @@ public:
         return head;
     }
 
-    string getFileNameData(){
+    // string getFileNameData(){
 
-    }
+    // }
 
 
     //Method which will add new data to the Node
@@ -168,6 +168,22 @@ public:
         else{
             return false;                                       //return false because it's not empty
         }
+    }
+
+    //Method wihch is used to empty the LinkedList and free up the memory to the system
+    void empty(){
+        count = 0;                                              //resetting count to 0, since everything will be removed
+        
+        //keep iterating till front is not pointing to null
+        while (front != nullptr){
+            Node<T>* temp = front;                              //initializing a temp node and pointing it to front, this temp will be used to delete the node after moving the front forward in the doubly-linkedlist
+            front = front->getNext();                           //pointing front to next node by getting next node. basically, moving forward in the doubly-linkedlist
+            temp->setNext(nullptr);                             //pointing temp.next to null
+            delete temp;                                        //deleting the temp node. basically the former front node
+        }
+
+        //after the LinkedList is empty, pointing front to null to ensure no lose pointers are remaining
+        front = nullptr;                                        
     }
 
     int getIndexOf(T data){

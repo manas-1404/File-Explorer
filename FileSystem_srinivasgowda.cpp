@@ -135,4 +135,33 @@ public:
         return text;
     }
 
+    vector<string> getFileNames(){
+        vector<string> vectorNames;
+
+        Node<File*>* temp = files.getHead();
+
+        while(temp != nullptr){
+            vectorNames.push_back(temp->getData()->getFileName());
+            temp = temp->getNext();
+        }
+
+        return vectorNames;
+    }
+
+protected:
+    File* findFileByName(string name){
+        File* searchFile;
+        Node<File*>* temp = files.getHead();
+
+        while( temp != nullptr ){
+            if(temp->getData()->getFileName() == name){
+                searchFile = temp->getData();
+            }
+
+            temp = temp->getNext();
+        }
+
+        return searchFile;
+    }
+
 };

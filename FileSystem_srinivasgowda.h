@@ -21,4 +21,22 @@ public:
     vector<int> getFileBlocks(); 
 };
 
+class FileManager{
+private:
+    char* hardDrive;
+    Queue<int> blocksAvailable;
+    LinkedList<File*> files;
+
+public:
+    FileManager(int size);
+    void addFile(string name, string contents);
+    void deleteFile(string name);
+    string readFile(string name);
+    vector<string> getFileNames();
+
+protected:
+    File* findFileByName(string name);
+
+}
+
 #endif // FILE_H

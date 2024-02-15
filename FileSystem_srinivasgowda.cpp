@@ -10,34 +10,28 @@
 
 using namespace std;                    // Correct syntax to use the std namespace
 
-class File{
 
-private:
-    string Filename;
-    LinkedList<int> indexList;
-
-public:
-    File(string newFileName){
+    File::File(string newFileName){
         Filename = newFileName;
     }
 
-    string getFileName(){
+    string File::getFileName(){
         return Filename;
     }
 
-    void addBlock(int index){
+    void File::addBlock(int index){
         indexList.add(index);
     }
 
-    void removeBlock(int index){
+    void File::removeBlock(int index){
         indexList.remove(index);
     }
 
-    int fileSize(){
+    int File::fileSize(){
         return indexList.getCurrentSize();
     }
 
-    vector<int> getFileBlocks(){
+    vector<int> File::getFileBlocks(){
         vector<int> indexes;
         Node<int>* temp = indexList.getHead();
         while(temp != nullptr){
@@ -48,18 +42,10 @@ public:
         return indexes;
     }
  
-};
 
-class FileManager{
 
-private:
-    char* hardDrive;
-    Queue<int> blocksAvailable;
-    LinkedList<File*> files;
-
-public:
-    FileManager(int size){
-        char hardDrive[size] = {};
+    FileManager::FileManager(int size){
+        hardDrive[size] = {};
 
         LinkedList<File*> files;
 
@@ -69,12 +55,12 @@ public:
         
     }
 
-    void addFile(string name, string contents){
+    void FileManager::addFile(string name, string contents){
         File* newFile = new File(name);
 
         int index;
         
-        for(int i = 0; i < contents.length(); i++){
+        for(int i = 0; i < static_cast<int>(contents.length()); i++){
             index = blocksAvailable.getFront();
             hardDrive[index] = contents[i];
             newFile->addBlock(index);
@@ -85,7 +71,7 @@ public:
         files.add(newFile);
     }
 
-    void deleteFile(string name){
+    void FileManager::deleteFile(string name){
         Node<File*>* temp = files.getHead();
         while(temp != nullptr){
             if(temp->getData()->getFileName() == name){
@@ -94,7 +80,7 @@ public:
                 int indexHardDrive;
 
                 //For loop to access each and every index in the LinkedList
-                for(int i = 0; i < indexesToDelete.size(); i++){
+                for(int i = 0; i < static_cast<int>(indexesToDelete.size()); i++){
                     indexHardDrive = indexesToDelete[i];
                     
                     hardDrive[indexHardDrive] = ' ';
@@ -113,7 +99,7 @@ public:
         }
     }
 
-    string readFile(string name){
+    string FileManager::readFile(string name){
         Node<File*>* temp = files.getHead();
 
         string text = "";
@@ -123,7 +109,7 @@ public:
             if(temp->getData()->getFileName() == name){
                 vector<int> indexesToRead = temp->getData()->getFileBlocks();
 
-                for(int i = 0; i < indexesToRead.size(); i++){
+                for(int i = 0; i < static_cast<int>(indexesToRead.size()); i++){
                     indexHardDrive = indexesToRead[i];
                     text = text + hardDrive[indexHardDrive];
                 }
@@ -136,7 +122,7 @@ public:
         return text;
     }
 
-    vector<string> getFileNames(){
+    vector<string> FileManager::getFileNames(){
         vector<string> vectorNames;
 
         Node<File*>* temp = files.getHead();
@@ -149,7 +135,7 @@ public:
         return vectorNames;
     }
 
-    vector<int> getFileSizes(){
+    vector<int> FileManager::getFileSizes(){
         vector<int> vectorSizes;
 
         Node<File*>* temp = files.getHead();
@@ -162,8 +148,7 @@ public:
         return vectorSizes;
     }
 
-protected:
-    File* findFileByName(string name){
+    File* FileManager::findFileByName(string name){
         File* searchFile;
         Node<File*>* temp = files.getHead();
 
@@ -177,5 +162,3 @@ protected:
 
         return searchFile;
     }
-
-};

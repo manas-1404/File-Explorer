@@ -19,6 +19,7 @@ public:
     File(string newFileName); 
     string getFileName(); 
     void addBlock(int index);
+    void removeBlock(int index);
     int fileSize(); 
     vector<int> getFileBlocks(); 
 };

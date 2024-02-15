@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <string>
 
-#include "FileSystem_srinivasgowda.h";
+#include "FileSystem_srinivasgowda.h"
 // #include "LinkedList_srinivasgowda.hpp";
 // #include "Queue_srinivasgowda.hpp";
 
@@ -28,11 +28,11 @@ int main(int argc, char *argv[]){
     string FileName = " ";
     string FileContents = " ";
 
-    if(argc == 3 && argv[1] == "-s"){
+    if(argc == 3 && string(argv[1]) == "-s"){
         sizeHardDrive = atoi(argv[2]);
     }
 
-    else if(argc == 5 && argv[1] == "-s" && argv[3] == "-f"){
+    else if(argc == 5 && string(argv[1]) == "-s" && string(argv[3]) == "-f"){
         sizeHardDrive = atoi(argv[2]);
         string fileDetail = argv[4];
 
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
             cout << left << setw(40) << "Filename";
             cout << left << setw(40) << "size";
 
-            for(int i = 0; i < fileNames.size(); i++){
+            for(int i = 0; i < static_cast<int>(fileNames.size()); i++){
                 cout << left << setw(40) << fileNames[i];
 
                 cout << right << setw(10) << fileSizes[i] << " blk" << endl;

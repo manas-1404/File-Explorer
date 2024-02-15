@@ -1,34 +1,31 @@
 #include <iostream>                     // Include the I/O stream library
+#include <iomanip>
 #include <stdexcept>                    // Include the exception library
 #include <cstdlib>
 
 #include "FileSystem_srinivasgowda.h";
+#include "LinkedList_srinivasgowda.hpp";
+#include "queue_srinivasgowda.hpp";
 
 
 using namespace std;                    // Correct syntax to use the std namespace
 
 void printMenu(){
-    int option;
 
-    while (option != 0){
-        cout << "Menu:" << endl;
-        cout << "1 – Show files on hard drive" << endl;
-        cout << "2 – Add a file" << endl;
-        cout << "3 – Delete a file" << endl;
-        cout << "4 – Output a file" << endl;
-        cout << "0 – Exit simulation" << endl;
-        cout << "Enter your option: ";
-        cin >> option;
-
-        if(option == 1){
-            
-        }
-    }
+    cout << "Menu:" << endl;
+    cout << "1 - Show files on hard drive" << endl;
+    cout << "2 – Add a file" << endl;
+    cout << "3 – Delete a file" << endl;
+    cout << "4 – Output a file" << endl;
+    cout << "0 – Exit simulation" << endl;
 }
 
 int main(int argc, char *argv[]){
     
     int sizeHardDrive;
+
+    string FileName = " ";
+    string FileContents = " ";
 
     if(argc == 3 && argv[1] == "-s"){
         sizeHardDrive = atoi(argv[2]);
@@ -40,10 +37,8 @@ int main(int argc, char *argv[]){
 
         int colonIndex = fileDetail.find(":");
 
-        string name = fileDetail.substr(0,colonIndex);
-        string contents = fileDetail.substr(colonIndex + 1);
-
-        cout << "Hello" << endl;
+        FileName = fileDetail.substr(0,colonIndex);
+        FileContents = fileDetail.substr(colonIndex + 1); 
 
     }
 
@@ -53,6 +48,73 @@ int main(int argc, char *argv[]){
 
     FileManager stupid(sizeHardDrive);
 
+    if(argc == 5){
+        stupid.addFile(FileName, FileContents);
+    }
+    
+
+    int option = -1;
+
+    while (option != 0){
+        printMenu();
+        cout << "Enter your option: ";
+        cin >> option;
+
+        if(option == 1){
+
+            vector<string> fileNames = stupid.getFileNames();
+            vector<int> fileSizes = stupid.getFileSizes();
+
+            cout << left << setw(40) << "Filename";
+            cout << left << setw(40) << "size";
+
+            for(int i = 0; i < fileNames.size(); i++){
+                cout << left << setw(40) << fileNames[i];
+
+                cout << right << setw(10) << fileSizes[i] << " blk" << endl;
+            }
+            
+        }
+
+        else if(option == 2){
+            string name;
+            string content;
+
+            cout << "Enter filename: ";
+            cin >> name;
+
+            cout << "\nEnter content string: ";
+            cin >> content;
+
+            stupid.addFile(name, content);
+        }
+
+        else if(option == 3){
+            string name;
+
+            cout << "Enter filename: ";
+            cin >> name;
+
+            stupid.deleteFile(name);
+        }
+
+        else if(option == 4){
+            string name;
+
+            cout << "Enter filename: ";
+            cin >> name;
+
+            string content = stupid.readFile(name);
+
+            cout << left << setw(30) << name;
+
+            cout << right << content << endl;
+        }
+
+        else{
+            break;
+        }
+    }
     
 
 };

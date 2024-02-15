@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include "LinkedList_srinivasgowda.hpp"
+#include "queue_srinivasgowda.hpp"
 
 
 class File {
@@ -33,6 +34,7 @@ public:
     void deleteFile(string name);
     string readFile(string name);
     vector<string> getFileNames();
+    vector<int> getFileSizes();
 
 protected:
     File* findFileByName(string name);

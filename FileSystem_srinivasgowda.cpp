@@ -60,7 +60,7 @@ public:
     FileManager(int size){
         char hardDrive[size] = {};
 
-        // files = nullptr;
+        LinkedList<File*> files;
 
         for(int i = 0; i < size; i++){
             blocksAvailable.enqueue(i);
@@ -146,6 +146,19 @@ public:
         }
 
         return vectorNames;
+    }
+
+    vector<int> getFileSizes(){
+        vector<int> vectorSizes;
+
+        Node<File*>* temp = files.getHead();
+
+        while(temp != nullptr){
+            vectorSizes.push_back(temp->getData()->fileSize());
+            temp = temp->getNext();
+        }
+
+        return vectorSizes;
     }
 
 protected:

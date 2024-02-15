@@ -1,7 +1,13 @@
 #ifndef LINKEDLIST_SRINIVASGOWDA_HPP
 #define LINKEDLIST_SRINIVASGOWDA_HPP
 
+#include <string>
+#include <iostream>                     // Include the I/O stream library
+#include <stdexcept>                    // Include the exception library
+
 #include "FileSystem_srinivasgowda.h"
+
+using namespace std;                    // Correct syntax to use the std namespace
 
 //Declaring a templated Class Node
 template<typename T> class Node {
@@ -131,28 +137,6 @@ public:
         count--;                                                //decreasing count by 1 because we removed a Node
     }
 
-    //might have errors
-    void sortedInsert(T data){
-        Node<T>* newNode = new Node(data);
-        string newFileName = data->getFileName();
-        string nodeFileName = head->getData()->getFileName();
-
-        if(head == nullptr || nodeFileName >= newFileName){
-            newNode->setNext(head);
-            head = newNode;
-        }else{
-            Node<T>* temp = head;
-
-            while(temp->getNext() != nullptr && nodeFileName < newFileName){
-                temp = temp->getNext();
-            }
-
-            newNode->setNext(temp->getNext());
-            temp->setNext(newNode);
-            
-        }
-    }
-
     //Method which will return count of number of data in LinkedList
     int getCurrentSize(){
         return count;                                           //return the count of number of data in Node
@@ -174,16 +158,16 @@ public:
     void empty(){
         count = 0;                                              //resetting count to 0, since everything will be removed
         
-        //keep iterating till front is not pointing to null
-        while (front != nullptr){
-            Node<T>* temp = front;                              //initializing a temp node and pointing it to front, this temp will be used to delete the node after moving the front forward in the doubly-linkedlist
-            front = front->getNext();                           //pointing front to next node by getting next node. basically, moving forward in the doubly-linkedlist
+        //keep iterating till head is not pointing to null
+        while (head != nullptr){
+            Node<T>* temp = head;                              //initializing a temp node and pointing it to head, this temp will be used to delete the node after moving the head forward in the linkedlist
+            head = head->getNext();                           //pointing head to next node by getting next node. basically, moving forward in the linkedlist
             temp->setNext(nullptr);                             //pointing temp.next to null
-            delete temp;                                        //deleting the temp node. basically the former front node
+            delete temp;                                        //deleting the temp node. basically the former head node
         }
 
-        //after the LinkedList is empty, pointing front to null to ensure no lose pointers are remaining
-        front = nullptr;                                        
+        //after the LinkedList is empty, pointing head to null to ensure no lose pointers are remaining
+        head = nullptr;                                        
     }
 
     int getIndexOf(T data){

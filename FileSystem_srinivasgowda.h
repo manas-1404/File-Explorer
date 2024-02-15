@@ -5,8 +5,9 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+
 #include "LinkedList_srinivasgowda.hpp"
-#include "queue_srinivasgowda.hpp"
+#include "Queue_srinivasgowda.hpp"
 
 
 class File {
@@ -39,6 +40,6 @@ public:
 protected:
     File* findFileByName(string name);
 
-}
+};
 
-#endif // FILE_H
+#endif

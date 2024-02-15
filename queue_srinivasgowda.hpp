@@ -3,21 +3,22 @@
 
 #include <iostream>                     // Include the I/O stream library
 #include <stdexcept>                    // Include the exception library
+#include <string>
 
 using namespace std;                    // Correct syntax to use the std namespace
 
-//Declaring a templated Class Node
-template<typename T> class Node {
+//Declaring a templated Class QueueNode
+template<typename T> class QueueNode {
 
-//properties of Node class are made private
+//properties of QueueNode class are made private
 private:
     T item;                                     //declared item of type T
-    Node<T>* next;                              //declared next of type node
+    QueueNode<T>* next;                              //declared next of type node
 
-//methods of Node class are made public
+//methods of QueueNode class are made public
 public:
-    //Overloaded constructor for creating the Node
-    Node(T newItem){
+    //Overloaded constructor for creating the QueueNode
+    QueueNode(T newItem){
         item = newItem;                         //storing item of this to newItem
         next = nullptr;                         //pointing next to null
     }
@@ -28,13 +29,13 @@ public:
     }
 
     //Getter method for get Next
-    Node<T>* getNext() {
-        return next;                            //return next Node in the Queue
+    QueueNode<T>* getNext() {
+        return next;                            //return next QueueNode in the Queue
     }
 
-    //Setter method which sets the next of the Node
-    void setNext(Node<T>* newNode) {
-        next = newNode;                         //storing the pointer of next Node
+    //Setter method which sets the next of the QueueNode
+    void setNext(QueueNode<T>* newQueueNode) {
+        next = newQueueNode;                         //storing the pointer of next QueueNode
     }
 };
 
@@ -44,7 +45,7 @@ template<typename T> class Queue{
 //properties of Queue class are made private
 private:
     int count;                                  //declared count of type int which stores the count of the number of items in Queue
-    Node<T>* front;                             //declared front of type Node<T> which is the head of the Queue
+    QueueNode<T>* front;                             //declared front of type QueueNode<T> which is the head of the Queue
 
 //methods of Queue class are made public
 public:
@@ -62,26 +63,26 @@ public:
 
     //Method which will add new items to the Queue
     void enqueue(T item){
-        Node<T>* newNode = new Node<T>(item);             //Creating a new Node Object
+        QueueNode<T>* newQueueNode = new QueueNode<T>(item);             //Creating a new QueueNode Object
         
         //if front = null, then the Queue is empty initially 
         if(front == nullptr){
-            newNode->setNext(front);                            //pointing newNode.next to front
-            front = newNode;                                    //pointing front to newNode
+            newQueueNode->setNext(front);                            //pointing newQueueNode.next to front
+            front = newQueueNode;                                    //pointing front to newQueueNode
             count++;                                            //increasing count by 1, because we just added an item
         }
 
         //Queue not empty, so add the next Item to the end
         else{
-            Node<T>* temp = front;                           //initializing temp (temporary node) by pointing to the front              
+            QueueNode<T>* temp = front;                           //initializing temp (temporary node) by pointing to the front              
             
             //keep iterating till temp.next is not pointing to null
             while(temp->getNext() != nullptr){
                 temp = temp->getNext();                         //pointing temp to temp.next, because we need to iterate through the Singly LinkedList Queue
             }
             
-            temp->setNext(newNode);                             //pointing temp.next to newNode
-            newNode->setNext(nullptr);                          //pointing newNode.next to null
+            temp->setNext(newQueueNode);                             //pointing temp.next to newQueueNode
+            newQueueNode->setNext(nullptr);                          //pointing newQueueNode.next to null
             count++;                                            //increasing count by 1, because we just added an item
         }
     }
@@ -96,12 +97,12 @@ public:
 
         //Queue not empty, so remove some item
 
-        Node<T> *removedNode = nullptr;                      //initializing and pointing removedNode to null
-        removedNode = front;                                //pointing removedNode to front
+        QueueNode<T> *removedQueueNode = nullptr;                      //initializing and pointing removedQueueNode to null
+        removedQueueNode = front;                                //pointing removedQueueNode to front
         front = front->getNext();                           //pointing front to front.next
         
-        delete removedNode;                                     //deleting removedNode to free the memory back to system
-        count--;                                                //decreasing count by 1 because we removed a Node
+        delete removedQueueNode;                                     //deleting removedQueueNode to free the memory back to system
+        count--;                                                //decreasing count by 1 because we removed a QueueNode
     }
 
     T getFront(){
@@ -119,7 +120,7 @@ public:
         
         //keep iterating till front is not pointing to null
         while (front != nullptr){
-            Node<T>* temp = front;                           //initializing a temp node and pointing it to front, this temp will be used to delete the node after moving the front forward in the doubly-linkedlist
+            QueueNode<T>* temp = front;                           //initializing a temp node and pointing it to front, this temp will be used to delete the node after moving the front forward in the doubly-linkedlist
             front = front->getNext();                           //pointing front to next node by getting next node. basically, moving forward in the doubly-linkedlist
             temp->setNext(nullptr);                             //pointing temp.next to null
             delete temp;                                        //deleting the temp node. basically the former front node

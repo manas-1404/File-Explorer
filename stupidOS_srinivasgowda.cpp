@@ -15,14 +15,15 @@ void printMenu(){
 
     cout << "Menu:" << endl;
     cout << "1 - Show files on hard drive" << endl;
-    cout << "2 – Add a file" << endl;
-    cout << "3 – Delete a file" << endl;
-    cout << "4 – Output a file" << endl;
-    cout << "0 – Exit simulation" << endl;
+    cout << "2 - Add a file" << endl;
+    cout << "3 - Delete a file" << endl;
+    cout << "4 - Output a file" << endl;
+    cout << "0 - Exit simulation" << endl;
 }
 
 int main(int argc, char *argv[]){
     
+    cout << "Hii World!!" << endl;
     int sizeHardDrive;
 
     string FileName = " ";
@@ -47,14 +48,20 @@ int main(int argc, char *argv[]){
         throw std::runtime_error("Command Line Argument Specs not met!!");
     }
 
+    cout << "Arguments taken successfully, next gonna run FileManager stupid(sizeHardDrive)" << endl;
     FileManager stupid(sizeHardDrive);
+    
+    cout << "FileManager stupid(sizeHardDrive) run was not successful" << endl;
 
     if(argc == 5){
         stupid.addFile(FileName, FileContents);
     }
     
+    cout << "Hello World. Arguments taken successfully" << endl;
 
     int option = -1;
+
+    cout << "Loop did not enter yet" << endl;
 
     while (option != 0){
         printMenu();
@@ -113,9 +120,12 @@ int main(int argc, char *argv[]){
         }
 
         else{
+            return 1;
             break;
         }
     }
     
+    cout << "Ended the program with errors" << endl;
 
+    return -1;
 };

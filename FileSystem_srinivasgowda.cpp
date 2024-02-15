@@ -2,8 +2,10 @@
 #include <stdexcept>                    // Include the exception library
 #include <vector>
 #include <string>
+#include <string.h>
 
 #include "FileSystem_srinivasgowda.h"
+
 // #include "LinkedList_srinivasgowda.hpp"
 // #include "Queue_srinivasgowda.hpp"
 
@@ -45,7 +47,10 @@ using namespace std;                    // Correct syntax to use the std namespa
 
 
     FileManager::FileManager(int size){
-        hardDrive[size] = {};
+        // hardDrive[size] = {};
+
+        hardDrive = new char[size];
+        memset(hardDrive, 0, size);
 
         LinkedList<File*> files;
 

@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -Wall -g
 
-TARGET = stupidOS_srinivasgowda
+TARGET = stupidos
 
 OBJS = FileSystem_srinivasgowda.o stupidOS_srinivasgowda.o
 

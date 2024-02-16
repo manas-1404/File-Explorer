@@ -1,5 +1,5 @@
-#include <iostream>                     // Include the I/O stream library
-#include <stdexcept>                    // Include the exception library
+#include <iostream>  // Include the I/O stream library
+#include <stdexcept> // Include the exception library
 #include <vector>
 #include <string>
 #include <string.h>
@@ -9,161 +9,188 @@
 // #include "LinkedList_srinivasgowda.hpp"
 // #include "Queue_srinivasgowda.hpp"
 
+using namespace std; // Correct syntax to use the std namespace
 
-using namespace std;                    // Correct syntax to use the std namespace
+File::File(string newFileName)
+{
+    Filename = newFileName;
+}
 
+string File::getFileName()
+{
+    return Filename;
+}
 
-    File::File(string newFileName){
-        Filename = newFileName;
+void File::addBlock(int index)
+{
+    indexList.add(index);
+}
+
+void File::removeBlock(int index)
+{
+    indexList.remove(index);
+}
+
+int File::fileSize()
+{
+    return indexList.getCurrentSize();
+}
+
+vector<int> File::getFileBlocks()
+{
+    vector<int> indexes;
+    Node<int> *temp = indexList.getHead();
+    while (temp != nullptr)
+    {
+        indexes.push_back(temp->getData());
+        temp = temp->getNext();
     }
 
-    string File::getFileName(){
-        return Filename;
+    return indexes;
+}
+
+FileManager::FileManager(int size)
+{
+    // hardDrive[size] = {};
+
+    // Allocate memory for the hard drive
+    hardDrive = new char[size];
+    // memset(hardDrive, 0, size);
+
+    // Initialize the hard drive to zeros using a loop
+    for (int i = 0; i < size; ++i)
+    {
+        hardDrive[i] = 0;
     }
 
-    void File::addBlock(int index){
-        indexList.add(index);
+    LinkedList<File *> files;
+
+    for (int i = 0; i < size; i++)
+    {
+        blocksAvailable.enqueue(i);
+    }
+}
+
+void FileManager::addFile(string name, string contents)
+{
+    File *newFile = new File(name);
+
+    int index;
+
+    for (int i = 0; i < static_cast<int>(contents.length()); i++)
+    {
+        index = blocksAvailable.getFront();
+        hardDrive[index] = contents[i];
+        newFile->addBlock(index);
+        blocksAvailable.dequeue();
     }
 
-    void File::removeBlock(int index){
-        indexList.remove(index);
-    }
+    // Source of big error
+    files.add(newFile);
+}
 
-    int File::fileSize(){
-        return indexList.getCurrentSize();
-    }
+void FileManager::deleteFile(string name)
+{
+    Node<File *> *temp = files.getHead();
+    while (temp != nullptr)
+    {
+        if (temp->getData()->getFileName() == name)
+        {
+            vector<int> indexesToDelete = temp->getData()->getFileBlocks();
 
-    vector<int> File::getFileBlocks(){
-        vector<int> indexes;
-        Node<int>* temp = indexList.getHead();
-        while(temp != nullptr){
-            indexes.push_back(temp->getData());
-            temp = temp->getNext();
-        }
+            int indexHardDrive;
 
-        return indexes;
-    }
- 
+            // For loop to access each and every index in the LinkedList
+            for (int i = 0; i < static_cast<int>(indexesToDelete.size()); i++)
+            {
+                indexHardDrive = indexesToDelete[i];
 
+                hardDrive[indexHardDrive] = ' ';
 
-    FileManager::FileManager(int size){
-        // hardDrive[size] = {};
+                blocksAvailable.enqueue(indexHardDrive);
 
-        hardDrive = new char[size];
-        memset(hardDrive, 0, size);
-
-        LinkedList<File*> files;
-
-        for(int i = 0; i < size; i++){
-            blocksAvailable.enqueue(i);
-        }
-        
-    }
-
-    void FileManager::addFile(string name, string contents){
-        File* newFile = new File(name);
-
-        int index;
-        
-        for(int i = 0; i < static_cast<int>(contents.length()); i++){
-            index = blocksAvailable.getFront();
-            hardDrive[index] = contents[i];
-            newFile->addBlock(index);
-            blocksAvailable.dequeue();
-        }
-
-        // Source of big error
-        files.add(newFile);
-    }
-
-    void FileManager::deleteFile(string name){
-        Node<File*>* temp = files.getHead();
-        while(temp != nullptr){
-            if(temp->getData()->getFileName() == name){
-                vector<int> indexesToDelete = temp->getData()->getFileBlocks();
-
-                int indexHardDrive;
-
-                //For loop to access each and every index in the LinkedList
-                for(int i = 0; i < static_cast<int>(indexesToDelete.size()); i++){
-                    indexHardDrive = indexesToDelete[i];
-                    
-                    hardDrive[indexHardDrive] = ' ';
-
-                    blocksAvailable.enqueue(indexHardDrive);
-
-                    //deleting the indexList (LinkedList stored in the File Object)
-                    temp->getData()->removeBlock(indexHardDrive);
-                }
-
-                //deletes the file object
-                files.remove(temp->getData());
+                // deleting the indexList (LinkedList stored in the File Object)
+                temp->getData()->removeBlock(indexHardDrive);
             }
 
-            temp = temp->getNext();
+            // deletes the file object
+            files.remove(temp->getData());
         }
+
+        temp = temp->getNext();
     }
+}
 
-    string FileManager::readFile(string name){
-        Node<File*>* temp = files.getHead();
+string FileManager::readFile(string name)
+{
+    Node<File *> *temp = files.getHead();
 
-        string text = "";
+    string text = "";
 
-        int indexHardDrive;
-        while(temp != nullptr){
-            if(temp->getData()->getFileName() == name){
-                vector<int> indexesToRead = temp->getData()->getFileBlocks();
+    int indexHardDrive;
+    while (temp != nullptr)
+    {
+        if (temp->getData()->getFileName() == name)
+        {
+            vector<int> indexesToRead = temp->getData()->getFileBlocks();
 
-                for(int i = 0; i < static_cast<int>(indexesToRead.size()); i++){
-                    indexHardDrive = indexesToRead[i];
-                    text = text + hardDrive[indexHardDrive];
-                }
-
+            for (int i = 0; i < static_cast<int>(indexesToRead.size()); i++)
+            {
+                indexHardDrive = indexesToRead[i];
+                text = text + hardDrive[indexHardDrive];
             }
-
-            temp = temp->getNext();
         }
 
-        return text;
+        temp = temp->getNext();
     }
 
-    vector<string> FileManager::getFileNames(){
-        vector<string> vectorNames;
+    return text;
+}
 
-        Node<File*>* temp = files.getHead();
+vector<string> FileManager::getFileNames()
+{
+    vector<string> vectorNames;
 
-        while(temp != nullptr){
-            vectorNames.push_back(temp->getData()->getFileName());
-            temp = temp->getNext();
+    Node<File *> *temp = files.getHead();
+
+    while (temp != nullptr)
+    {
+        vectorNames.push_back(temp->getData()->getFileName());
+        temp = temp->getNext();
+    }
+
+    return vectorNames;
+}
+
+vector<int> FileManager::getFileSizes()
+{
+    vector<int> vectorSizes;
+
+    Node<File *> *temp = files.getHead();
+
+    while (temp != nullptr)
+    {
+        vectorSizes.push_back(temp->getData()->fileSize());
+        temp = temp->getNext();
+    }
+
+    return vectorSizes;
+}
+
+File *FileManager::findFileByName(string name)
+{
+    File *searchFile;
+    Node<File *> *temp = files.getHead();
+
+    while (temp != nullptr)
+    {
+        if (temp->getData()->getFileName() == name)
+        {
+            searchFile = temp->getData();
         }
 
-        return vectorNames;
+        temp = temp->getNext();
     }
 
-    vector<int> FileManager::getFileSizes(){
-        vector<int> vectorSizes;
-
-        Node<File*>* temp = files.getHead();
-
-        while(temp != nullptr){
-            vectorSizes.push_back(temp->getData()->fileSize());
-            temp = temp->getNext();
-        }
-
-        return vectorSizes;
-    }
-
-    File* FileManager::findFileByName(string name){
-        File* searchFile;
-        Node<File*>* temp = files.getHead();
-
-        while( temp != nullptr ){
-            if(temp->getData()->getFileName() == name){
-                searchFile = temp->getData();
-            }
-
-            temp = temp->getNext();
-        }
-
-        return searchFile;
-    }
+    return searchFile;
+}

@@ -23,7 +23,6 @@ void printMenu(){
 
 int main(int argc, char *argv[]){
     
-    cout << "Hii World!!" << endl;
     int sizeHardDrive;
 
     string FileName = " ";
@@ -48,20 +47,20 @@ int main(int argc, char *argv[]){
         throw std::runtime_error("Command Line Argument Specs not met!!");
     }
 
-    cout << "Arguments taken successfully, next gonna run FileManager stupid(sizeHardDrive)" << endl;
+    // cout << "Arguments taken successfully, next gonna run FileManager stupid(sizeHardDrive)" << endl;
     FileManager stupid(sizeHardDrive);
     
-    cout << "FileManager stupid(sizeHardDrive) run was not successful" << endl;
+    // cout << "FileManager stupid(sizeHardDrive) run was not successful" << endl;
 
     if(argc == 5){
         stupid.addFile(FileName, FileContents);
     }
     
-    cout << "Hello World. Arguments taken successfully" << endl;
+    // cout << "Hello World. Arguments taken successfully" << endl;
 
     int option = -1;
 
-    cout << "Loop did not enter yet" << endl;
+    // cout << "Loop did not enter yet" << endl;
 
     while (option != 0){
         printMenu();
@@ -125,7 +124,7 @@ int main(int argc, char *argv[]){
         }
     }
     
-    cout << "Ended the program with errors" << endl;
+    // cout << "Ended the program with errors" << endl;
 
     return -1;
 };

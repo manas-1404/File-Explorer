@@ -83,7 +83,7 @@ int main(int argc, char *argv[]){
 
     while (option != 0){
         printMenu();
-        cout << "Enter your option: ";
+        // cout << "Enter your option: ";
         cin >> option;
 
         if(option == 1){
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
             vector<int> fileSizes = stupid.getFileSizes();
 
             cout << left << setw(40) << "Filename";
-            cout << left << setw(40) << "size" << endl;
+            cout << right << setw(14) << "size" << endl;
 
             for(int i = 0; i < static_cast<int>(fileNames.size()); i++){
                 cout << left << setw(40) << fileNames[i];
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
             cout << "Enter filename: ";
             cin >> name;
 
-            cout << "\nEnter content string: ";
+            cout << "Enter content string: ";
             cin >> content;
 
             stupid.addFile(name, content);
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]){
         else if(option == 3){
             string name;
 
-            cout << "Enter filename: ";
+            cout << "Enter filename to delete: ";
             cin >> name;
 
             stupid.deleteFile(name);
@@ -129,6 +129,9 @@ int main(int argc, char *argv[]){
 
             cout << "Enter filename: ";
             cin >> name;
+
+            cout << left << setw(40) << "Filename";
+            cout << right << setw(0) << "Contents" << endl;
 
             string content = stupid.readFile(name);
 

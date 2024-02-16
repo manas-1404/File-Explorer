@@ -51,29 +51,22 @@ vector<int> File::getFileBlocks()
 
 FileManager::FileManager(int size)
 {
-    // hardDrive[size] = {};
-
     // Allocate memory for the hard drive
     hardDrive = new char[size];
     // memset(hardDrive, 0, size);
 
     // Initialize the hard drive to zeros using a loop
-    for (int i = 0; i < size; ++i)
-    {
-        hardDrive[i] = 0;
+    for (int i = 0; i < size; ++i){
+        // hardDrive[i] = 0;
+        blocksAvailable.enqueue(i);
     }
 
     LinkedList<File *> files;
-
-    for (int i = 0; i < size; i++)
-    {
-        blocksAvailable.enqueue(i);
-    }
 }
 
 void FileManager::addFile(string name, string contents)
 {
-    File *newFile = new File(name);
+    File* newFile = new File(name);
 
     int index;
 
@@ -123,7 +116,7 @@ void FileManager::deleteFile(string name)
 
 string FileManager::readFile(string name)
 {
-    Node<File *> *temp = files.getHead();
+    Node<File*>* temp = files.getHead();
 
     string text = "";
 
@@ -151,10 +144,9 @@ vector<string> FileManager::getFileNames()
 {
     vector<string> vectorNames;
 
-    Node<File *> *temp = files.getHead();
+    Node<File*>* temp = files.getHead();
 
-    while (temp != nullptr)
-    {
+    while (temp != nullptr){
         vectorNames.push_back(temp->getData()->getFileName());
         temp = temp->getNext();
     }

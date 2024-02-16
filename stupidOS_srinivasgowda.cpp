@@ -3,6 +3,7 @@
 #include <stdexcept>                    // Include the exception library
 #include <cstdlib>
 #include <string>
+#include <fstream>
 
 #include "FileSystem_srinivasgowda.h"
 // #include "LinkedList_srinivasgowda.hpp";
@@ -34,12 +35,47 @@ int main(int argc, char *argv[]){
 
     else if(argc == 5 && string(argv[1]) == "-s" && string(argv[3]) == "-f"){
         sizeHardDrive = atoi(argv[2]);
-        string fileDetail = argv[4];
 
-        int colonIndex = fileDetail.find(":");
+        string file = argv[4];
 
-        FileName = fileDetail.substr(0,colonIndex);
-        FileContents = fileDetail.substr(colonIndex + 1); 
+        string fileDetail;
+        int colonIndex;
+
+        // Open the file using the name provided as command line argument
+        ifstream inputFile(file);
+
+        if (inputFile.is_open())
+        {
+            // cout << "\nStarting while(getline())\n" << endl;
+
+            while (getline(inputFile, fileDetail))
+            {
+                colonIndex = fileDetail.find(":");
+                if (colonIndex != static_cast<int>(string::npos))
+                {
+                    FileName = fileDetail.substr(0, colonIndex);
+                    FileContents = fileDetail.substr(colonIndex + 1);
+                }
+                else
+                {
+                    cerr << "Invalid line format in file: " << fileDetail << endl;
+                }
+            }
+
+            // cout << "\nEnd of while loop\n" << endl;
+
+            inputFile.close();
+        }
+        else
+        {
+            cerr << "Failed to open file: " << file << endl;
+            return 1;
+        }
+
+        // string fileDetail = string(argv[4]);
+
+        // FileName = fileDetail.substr(0,colonIndex);
+        // FileContents = fileDetail.substr(colonIndex + 1);
 
     }
 
@@ -47,20 +83,26 @@ int main(int argc, char *argv[]){
         throw std::runtime_error("Command Line Argument Specs not met!!");
     }
 
-    // cout << "Arguments taken successfully, next gonna run FileManager stupid(sizeHardDrive)" << endl;
+    // cout << "---------------------------------------";
+    // cout << "\nNow Running FileManager stupid(sizeHardDrive)\n" << endl;
+
     FileManager stupid(sizeHardDrive);
     
-    // cout << "FileManager stupid(sizeHardDrive) run was not successful" << endl;
+    // cout << "\nFileManager stupid(sizeHardDrive) run successful\n" << endl;
+    // cout << "---------------------------------------";
 
     if(argc == 5){
+
+        // cout << "\nImplementing addFile()\n" << endl;
         stupid.addFile(FileName, FileContents);
+        // cout << "\nEnd of addFile()\n" << endl;
     }
     
     // cout << "Hello World. Arguments taken successfully" << endl;
 
     int option = -1;
 
-    // cout << "Loop did not enter yet" << endl;
+    // cout << "\nwhile(option) loop starting now\n" << endl;
 
     while (option != 0){
         printMenu();
@@ -73,7 +115,7 @@ int main(int argc, char *argv[]){
             vector<int> fileSizes = stupid.getFileSizes();
 
             cout << left << setw(40) << "Filename";
-            cout << left << setw(40) << "size";
+            cout << left << setw(40) << "size" << endl;
 
             for(int i = 0; i < static_cast<int>(fileNames.size()); i++){
                 cout << left << setw(40) << fileNames[i];

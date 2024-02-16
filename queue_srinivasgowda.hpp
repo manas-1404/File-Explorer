@@ -44,8 +44,9 @@ template<typename T> class Queue{
 
 //properties of Queue class are made private
 private:
-    int count;                                  //declared count of type int which stores the count of the number of items in Queue
-    QueueNode<T>* front;                             //declared front of type QueueNode<T> which is the head of the Queue
+    int count;                                          //declared count of type int which stores the count of the number of items in Queue
+    QueueNode<T>* front;                                //declared front of type QueueNode<T> which is the head of the Queue
+    QueueNode<T>* tail;                                 //declared tail of type QueueNode<T> which is the tail of the Queue
 
 //methods of Queue class are made public
 public:
@@ -54,6 +55,7 @@ public:
     Queue(){
         count = 0;                                              //initializing count to 0
         front = nullptr;                                        //initializing front to null
+        tail = nullptr;                                         //initializing tail to null
     }
 
     //Destructor for memory management
@@ -67,27 +69,21 @@ public:
         
         //if front = null, then the Queue is empty initially 
         if(front == nullptr){
-            newQueueNode->setNext(front);                            //pointing newQueueNode.next to front
             front = newQueueNode;                                    //pointing front to newQueueNode
+            tail = newQueueNode;
             count++;                                            //increasing count by 1, because we just added an item
         }
 
         //Queue not empty, so add the next Item to the end
         else{
-            QueueNode<T>* temp = front;                           //initializing temp (temporary node) by pointing to the front              
-            
-            //keep iterating till temp.next is not pointing to null
-            while(temp->getNext() != nullptr){
-                temp = temp->getNext();                         //pointing temp to temp.next, because we need to iterate through the Singly LinkedList Queue
-            }
-            
-            temp->setNext(newQueueNode);                             //pointing temp.next to newQueueNode
-            newQueueNode->setNext(nullptr);                          //pointing newQueueNode.next to null
+            tail->setNext(newQueueNode);
+            tail = newQueueNode;
+            tail->setNext(nullptr);
             count++;                                            //increasing count by 1, because we just added an item
         }
     }
 
-    //Method which will pick a random node and remove it and return the contents of that node. Basically, getting an item out of the Queue
+    //Method which will remove the first QueueNode and return the contents of that node. Basically, getting an item out of the Queue
     void dequeue(){
         //checking if the Queue is empty. 
         if (count == 0){
@@ -97,9 +93,13 @@ public:
 
         //Queue not empty, so remove some item
 
-        QueueNode<T> *removedQueueNode = nullptr;                      //initializing and pointing removedQueueNode to null
-        removedQueueNode = front;                                //pointing removedQueueNode to front
-        front = front->getNext();                           //pointing front to front.next
+        QueueNode<T> *removedQueueNode = front;                 //initializing and pointing removedQueueNode to front
+        front = front->getNext();                               //pointing front to front.next
+
+        // If the queue is now empty, update the tail pointer as well
+        if (front == nullptr) {                                 
+            tail = nullptr;
+        }
         
         delete removedQueueNode;                                     //deleting removedQueueNode to free the memory back to system
         count--;                                                //decreasing count by 1 because we removed a QueueNode

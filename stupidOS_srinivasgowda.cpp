@@ -130,8 +130,11 @@ int main(int argc, char *argv[]){
             cout << "Enter filename: ";
             cin >> name;
 
-            cout << left << setw(40) << "Filename";
-            cout << right << setw(0) << "Contents" << endl;
+            // cout << left << setw(40) << "Filename";
+            // cout << right << setw(0) << "Contents" << endl;
+
+            cout << left << setw(30) << "Filename";
+            cout << left <<setw(0) << "Contents" << endl;
 
             string content = stupid.readFile(name);
 

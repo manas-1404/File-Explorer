@@ -26,8 +26,12 @@ int main(int argc, char *argv[]){
     
     int sizeHardDrive;
 
+    string file;
+    string fileDetail;
     string FileName = " ";
     string FileContents = " ";
+    
+    int colonIndex;
 
     if(argc == 3 && string(argv[1]) == "-s"){
         sizeHardDrive = atoi(argv[2]);
@@ -36,66 +40,39 @@ int main(int argc, char *argv[]){
     else if(argc == 5 && string(argv[1]) == "-s" && string(argv[3]) == "-f"){
         sizeHardDrive = atoi(argv[2]);
 
-        string file = argv[4];
-
-        string fileDetail;
-        int colonIndex;
-
-        // Open the file using the name provided as command line argument
-        ifstream inputFile(file);
-
-        if (inputFile.is_open())
-        {
-            // cout << "\nStarting while(getline())\n" << endl;
-
-            while (getline(inputFile, fileDetail))
-            {
-                colonIndex = fileDetail.find(":");
-                if (colonIndex != static_cast<int>(string::npos))
-                {
-                    FileName = fileDetail.substr(0, colonIndex);
-                    FileContents = fileDetail.substr(colonIndex + 1);
-                }
-                else
-                {
-                    cerr << "Invalid line format in file: " << fileDetail << endl;
-                }
-            }
-
-            // cout << "\nEnd of while loop\n" << endl;
-
-            inputFile.close();
-        }
-        else
-        {
-            cerr << "Failed to open file: " << file << endl;
-            return 1;
-        }
-
-        // string fileDetail = string(argv[4]);
-
-        // FileName = fileDetail.substr(0,colonIndex);
-        // FileContents = fileDetail.substr(colonIndex + 1);
-
+        file = argv[4];
     }
 
     else{
         throw std::runtime_error("Command Line Argument Specs not met!!");
     }
 
-    // cout << "---------------------------------------";
-    // cout << "\nNow Running FileManager stupid(sizeHardDrive)\n" << endl;
-
     FileManager stupid(sizeHardDrive);
     
-    // cout << "\nFileManager stupid(sizeHardDrive) run successful\n" << endl;
-    // cout << "---------------------------------------";
-
     if(argc == 5){
 
-        // cout << "\nImplementing addFile()\n" << endl;
-        stupid.addFile(FileName, FileContents);
-        // cout << "\nEnd of addFile()\n" << endl;
+        // Open the file using the name provided as command line argument
+        ifstream inputFile(file);
+
+        if (inputFile.is_open()){
+            while (getline(inputFile, fileDetail)) {
+                colonIndex = fileDetail.find(":");
+                if (colonIndex != static_cast<int>(string::npos)){
+                    FileName = fileDetail.substr(0, colonIndex);
+                    FileContents = fileDetail.substr(colonIndex + 1);
+                    stupid.addFile(FileName, FileContents);
+                }
+                else{
+                    cerr << "Invalid line format in file: " << fileDetail << endl;
+                }
+            }
+
+            inputFile.close();
+        }
+        else{
+            cerr << "Failed to open file: " << file << endl;
+            return 1;
+        }
     }
     
     // cout << "Hello World. Arguments taken successfully" << endl;

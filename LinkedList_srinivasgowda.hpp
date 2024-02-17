@@ -51,7 +51,7 @@ private:
 public:
     LinkedList(){
         count = 0;
-        head = nullptr;
+        head = NULL;
         // tail = nullptr;
     }
 
@@ -67,10 +67,12 @@ public:
 
     //Method which will add new data to the Node
     void add(T data){
+
         Node<T>* newNode = new Node<T>(data);                   //Creating a new Node Object
         
         //if head = null, then the Node is empty initially 
-        if(head == nullptr){
+        if(head == NULL){
+
             newNode->setNext(head);                            //pointing newNode.next to head
             head = newNode;                                    //pointing head to newNode
             // tail = head;

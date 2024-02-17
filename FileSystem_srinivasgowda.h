@@ -14,33 +14,36 @@
 class File {
 private:
     string Filename;                   
-    LinkedList<int> indexList;              
+    LinkedList<int>* indexList;              
 
 public:
+    File();
     File(string newFileName); 
     string getFileName(); 
     void addBlock(int index);
     void removeBlock(int index);
     int fileSize(); 
-    vector<int> getFileBlocks(); 
+    LinkedList<int>* getFileBlocks();
+    bool operator==(const File &other) const;
 };
 
 class FileManager{
 private:
     char* hardDrive;
     Queue<int> blocksAvailable;
-    LinkedList<File*> files;
+    LinkedList<File> *files;
 
 public:
     FileManager(int size);
     void addFile(string name, string contents);
     void deleteFile(string name);
     string readFile(string name);
+    int getfileSizes(string name);
     vector<string> getFileNames();
-    vector<int> getFileSizes();
+    // vector<int> getFileSizes();
 
 protected:
-    File* findFileByName(string name);
+    File findFileByName(string name);
 
 };
 

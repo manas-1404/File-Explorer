@@ -11,9 +11,15 @@
 
 using namespace std; // Correct syntax to use the std namespace
 
+File::File(){
+    Filename = "";
+    indexList = new LinkedList<int>();
+}
+
 File::File(string newFileName)
 {
     Filename = newFileName;
+    indexList = new LinkedList<int>();
 }
 
 string File::getFileName()
@@ -23,30 +29,38 @@ string File::getFileName()
 
 void File::addBlock(int index)
 {
-    indexList.add(index);
+    indexList->add(index);
 }
 
 void File::removeBlock(int index)
 {
-    indexList.remove(index);
+    indexList->remove(index);
 }
 
 int File::fileSize()
 {
-    return indexList.getCurrentSize();
+    return indexList->getCurrentSize();
 }
 
-vector<int> File::getFileBlocks()
-{
-    vector<int> indexes;
-    Node<int> *temp = indexList.getHead();
-    while (temp != nullptr)
-    {
-        indexes.push_back(temp->getData());
-        temp = temp->getNext();
-    }
+// vector<int> File::getFileBlocks()
+// {
+//     vector<int> indexes;
+//     Node<int>* temp = indexList.getHead();
+//     while (temp != nullptr){
+//         indexes.push_back(temp->getData());
+//         temp = temp->getNext();
+//     }
 
-    return indexes;
+//     return indexes;
+// }
+
+LinkedList<int>* File::getFileBlocks(){
+    return indexList;
+}
+
+bool File::operator==(const File& other) const {
+    // Compare the filenames or any other property that you deem makes files "equal"
+    return this->Filename == other.Filename;
 }
 
 FileManager::FileManager(int size)
@@ -61,12 +75,12 @@ FileManager::FileManager(int size)
         blocksAvailable.enqueue(i);
     }
 
-    LinkedList<File *> files;
+    files = new LinkedList<File>();
 }
 
 void FileManager::addFile(string name, string contents)
 {
-    File* newFile = new File(name);
+    File newFile(name);
 
     int index;
 
@@ -74,66 +88,47 @@ void FileManager::addFile(string name, string contents)
     {
         index = blocksAvailable.getFront();
         hardDrive[index] = contents[i];
-        newFile->addBlock(index);
+        newFile.addBlock(index);
         blocksAvailable.dequeue();
     }
 
     // Source of big error
-    files.add(newFile);
+    files->add(newFile);
 }
 
 void FileManager::deleteFile(string name)
 {
-    Node<File *> *temp = files.getHead();
-    while (temp != nullptr)
-    {
-        if (temp->getData()->getFileName() == name)
-        {
-            vector<int> indexesToDelete = temp->getData()->getFileBlocks();
+    File fileToDelete = findFileByName(name);
 
-            int indexHardDrive;
+    LinkedList<int>* fileIndexes = fileToDelete.getFileBlocks();
 
-            // For loop to access each and every index in the LinkedList
-            for (int i = 0; i < static_cast<int>(indexesToDelete.size()); i++)
-            {
-                indexHardDrive = indexesToDelete[i];
+    Node<int>* temp = fileIndexes->getHead();
 
-                hardDrive[indexHardDrive] = ' ';
+    int index;
 
-                blocksAvailable.enqueue(indexHardDrive);
-
-                // deleting the indexList (LinkedList stored in the File Object)
-                temp->getData()->removeBlock(indexHardDrive);
-            }
-
-            // deletes the file object
-            files.remove(temp->getData());
-        }
-
+    while(temp != nullptr){
+        index = temp->getData();
+        blocksAvailable.enqueue(index);
         temp = temp->getNext();
     }
+
+    files->remove(fileToDelete);
 }
 
 string FileManager::readFile(string name)
 {
-    Node<File*>* temp = files.getHead();
-
     string text = "";
+    int index;
 
-    int indexHardDrive;
-    while (temp != nullptr)
-    {
-        if (temp->getData()->getFileName() == name)
-        {
-            vector<int> indexesToRead = temp->getData()->getFileBlocks();
+    File fileToRead = findFileByName(name);
 
-            for (int i = 0; i < static_cast<int>(indexesToRead.size()); i++)
-            {
-                indexHardDrive = indexesToRead[i];
-                text = text + hardDrive[indexHardDrive];
-            }
-        }
+    LinkedList<int>* fileIndexes = fileToRead.getFileBlocks();
 
+    Node<int>* temp = fileIndexes->getHead();
+
+    while(temp != nullptr){
+        index = temp->getData();
+        text = text + hardDrive[index];
         temp = temp->getNext();
     }
 
@@ -144,45 +139,60 @@ vector<string> FileManager::getFileNames()
 {
     vector<string> vectorNames;
 
-    Node<File*>* temp = files.getHead();
+    Node<File>* temp = files->getHead();
 
     while (temp != nullptr){
-        vectorNames.push_back(temp->getData()->getFileName());
+        vectorNames.push_back(temp->getData().getFileName());
         temp = temp->getNext();
     }
 
     return vectorNames;
 }
 
-vector<int> FileManager::getFileSizes()
-{
-    vector<int> vectorSizes;
+int FileManager::getfileSizes(string name){
+    File searchFile = findFileByName(name);
 
-    Node<File *> *temp = files.getHead();
+    int index = searchFile.fileSize();
 
-    while (temp != nullptr)
-    {
-        vectorSizes.push_back(temp->getData()->fileSize());
-        temp = temp->getNext();
-    }
-
-    return vectorSizes;
+    return index;
 }
 
-File *FileManager::findFileByName(string name)
+// vector<int> FileManager::getFileSizes()
+// {
+//     vector<int> vectorSizes;
+
+//     Node<File>* temp = files->getHead();
+
+//     while (temp != nullptr){
+//         vectorSizes.push_back(temp->getData().fileSize());
+//         temp = temp->getNext();
+//     }
+
+//     return vectorSizes;
+// }
+
+File FileManager::findFileByName(string name)
 {
-    File *searchFile;
-    Node<File *> *temp = files.getHead();
+    int flag = -1;
+    File searchFile;
+    Node<File>* temp = files->getHead();
 
     while (temp != nullptr)
     {
-        if (temp->getData()->getFileName() == name)
+        if (temp->getData().getFileName() == name)
         {
             searchFile = temp->getData();
+            flag = 1;
+            break;
         }
 
         temp = temp->getNext();
     }
 
+    if(flag == -1){
+        throw std::runtime_error("File Not Found");
+    }
+
     return searchFile;
+    
 }

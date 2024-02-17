@@ -89,7 +89,9 @@ int main(int argc, char *argv[]){
         if(option == 1){
 
             vector<string> fileNames = stupid.getFileNames();
-            vector<int> fileSizes = stupid.getFileSizes();
+            // vector<int> fileSizes = stupid.getFileSizes();
+
+            int index;
 
             cout << left << setw(40) << "Filename";
             cout << right << setw(14) << "size" << endl;
@@ -97,7 +99,9 @@ int main(int argc, char *argv[]){
             for(int i = 0; i < static_cast<int>(fileNames.size()); i++){
                 cout << left << setw(40) << fileNames[i];
 
-                cout << right << setw(10) << fileSizes[i] << " blk" << endl;
+                index = stupid.getfileSizes(fileNames[i]);
+
+                cout << right << setw(10) << index << " blk" << endl;
             }
             
         }
@@ -118,7 +122,7 @@ int main(int argc, char *argv[]){
         else if(option == 3){
             string name;
 
-            cout << "Enter filename to delete: ";
+            cout << "Enter filename: ";
             cin >> name;
 
             stupid.deleteFile(name);
@@ -130,8 +134,8 @@ int main(int argc, char *argv[]){
             cout << "Enter filename: ";
             cin >> name;
 
-            cout << left << setw(40) << "Filename";
-            cout << right << setw(0) << "Contents" << endl;
+            cout << left << setw(30) << "Filename";
+            cout << left <<setw(0) << "Contents" << endl;
 
             string content = stupid.readFile(name);
 
@@ -140,9 +144,8 @@ int main(int argc, char *argv[]){
             cout << right << content << endl;
         }
 
-        else{
-            return 1;
-            break;
+        else if(option == 0) {
+            
         }
     }
     

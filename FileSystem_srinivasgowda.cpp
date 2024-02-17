@@ -14,6 +14,7 @@ using namespace std; // Correct syntax to use the std namespace
 File::File(string newFileName)
 {
     Filename = newFileName;
+    indexList = new LinkedList<int>();
 }
 
 string File::getFileName()

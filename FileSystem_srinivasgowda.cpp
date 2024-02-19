@@ -1,112 +1,119 @@
-#include <iostream>  // Include the I/O stream library
-#include <stdexcept> // Include the exception library
-#include <vector>
-#include <string>
-#include <string.h>
+#include <iostream>                                         //Include the I/O stream library
+#include <stdexcept>                                        //Include the exception library
+#include <vector>                                           //Include the vector library
+#include <string>                                           //Include the string library
+#include <string.h>                                         //Include the string.h library
 
+// include FileSystem Header File
 #include "FileSystem_srinivasgowda.h"
 
-// #include "LinkedList_srinivasgowda.hpp"
-// #include "Queue_srinivasgowda.hpp"
 
-using namespace std; // Correct syntax to use the std namespace
+using namespace std;                                        //Correct syntax to use the std namespace
 
+//Default constructor for FIle Class
 File::File(){
-    Filename = "";
-    indexList = new LinkedList<int>();
+    Filename = "";                                          //initializing Filename to ""               
+    indexList = new LinkedList<int>();                      //initializing new LinkedList containing integer
 }
 
-File::File(string newFileName)
-{
-    Filename = newFileName;
-    indexList = new LinkedList<int>();
+//Overloaded Constructor
+File::File(string newFileName){
+    Filename = newFileName;                                 //initializing Filename to newFileName while creating a object
+    indexList = new LinkedList<int>();                      //initializing new LinkedList containing integer
 }
 
-string File::getFileName()
-{
-    return Filename;
+//Getter for FileName
+string File::getFileName(){
+    return Filename;                                        //return Filename
 }
 
-void File::addBlock(int index)
-{
+//Method adds an index to the linked list
+void File::addBlock(int index){
+    
+    //Call the add method of the linkedlist to add the index
     indexList->add(index);
 }
 
-void File::removeBlock(int index)
-{
-    indexList->remove(index);
-}
+//Method returns how big the file is (linkedlist size)
+int File::fileSize(){
 
-int File::fileSize()
-{
+    //return the size of the linkedlist
     return indexList->getCurrentSize();
 }
 
-// vector<int> File::getFileBlocks()
-// {
-//     vector<int> indexes;
-//     Node<int>* temp = indexList.getHead();
-//     while (temp != nullptr){
-//         indexes.push_back(temp->getData());
-//         temp = temp->getNext();
-//     }
-
-//     return indexes;
-// }
-
+//Method returns the indexes that make up the file
 LinkedList<int>* File::getFileBlocks(){
+
+    //return the entire linkedlist
     return indexList;
 }
 
+//Method to check if 2 objects are equal
 bool File::operator==(const File& other) const {
-    // Compare the filenames or any other property that you deem makes files "equal"
+
+    //returning the result of the comparison of 2 objects
     return this->Filename == other.Filename;
 }
 
-FileManager::FileManager(int size)
-{
-    // Allocate memory for the hard drive
-    hardDrive = new char[size];
-    // memset(hardDrive, 0, size);
+//Overloaded constructor for FIleManager Class
+FileManager::FileManager(int size){
 
-    // Initialize the hard drive to zeros using a loop
+    //Allocating memory for the hard drive with the size
+    hardDrive = new char[size];
+
+    //Initializing the queue to store available index using a for loop
     for (int i = 0; i < size; ++i){
-        // hardDrive[i] = 0;
         blocksAvailable.enqueue(i);
     }
 
+    //initializing new LinkedList containing File object
     files = new LinkedList<File>();
 }
 
-void FileManager::addFile(string name, string contents)
-{
-    File newFile(name);
+//Method that builds a new file, puts the contents on the hard drive and in the files linkedlist
+void FileManager::addFile(string name, string contents){
+    File newFile(name);                         //Creating a new File Object with the name
 
-    int index;
+    int index;                                  //initializing index of HardDrive
 
-    for (int i = 0; i < static_cast<int>(contents.length()); i++)
-    {
-        index = blocksAvailable.getFront();
+    //for loop to traverse through each and every character in the string contents
+    for (int i = 0; i < static_cast<int>(contents.length()); i++){
+
+        //storing the available index with the peek Queue method
+        index = blocksAvailable.peek();
+
+        //storing the character in the hardDrive at index position 
         hardDrive[index] = contents[i];
+
+        //Adding the current hardDrive index containing the current character to the File Linkedlist
         newFile.addBlock(index);
+
+        //Dequeue to remove the used up memory block from queue
         blocksAvailable.dequeue();
     }
 
-    // Source of big error
+    //Adding the File object to the FileManager linkedlist
     files->add(newFile);
 }
 
-void FileManager::deleteFile(string name)
-{
+//Method that deletes a file and put the chunks that file used to occupy back into the blocksAvailable queue
+void FileManager::deleteFile(string name){
+
+    //Storing the file to delete File Object
     File fileToDelete = findFileByName(name);
 
+    //Storing the linkedlist of the characters which make up the file. the character index linkedlist is returned with getFileBlocks method
     LinkedList<int>* fileIndexes = fileToDelete.getFileBlocks();
 
+    //initializing a temp node and pointing it to head of File characters Linkedlist
     Node<int>* temp = fileIndexes->getHead();
 
-    int index;
+    int index;                              //initializing index of HardDrive
 
+    //Iterating through the Linkedlist  till we find the last element
     while(temp != nullptr){
+
+        //storing the index of the 
         index = temp->getData();
         blocksAvailable.enqueue(index);
         temp = temp->getNext();

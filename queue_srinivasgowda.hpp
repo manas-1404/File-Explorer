@@ -105,7 +105,7 @@ public:
         count--;                                                //decreasing count by 1 because we removed a QueueNode
     }
 
-    T getFront(){
+    T peek(){
         return front->getItem();
     }
 

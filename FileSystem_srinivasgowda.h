@@ -21,7 +21,7 @@ public:
     File(string newFileName); 
     string getFileName(); 
     void addBlock(int index);
-    void removeBlock(int index);
+    // void removeBlock(int index);
     int fileSize(); 
     LinkedList<int>* getFileBlocks();
     bool operator==(const File &other) const;

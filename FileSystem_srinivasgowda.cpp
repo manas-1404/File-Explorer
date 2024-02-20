@@ -86,7 +86,7 @@ void FileManager::addFile(string name, string contents){
     for (int i = 0; i < static_cast<int>(contents.length()); i++){
 
         //storing the available index with the front Queue method
-        index = blocksAvailable.front();
+        index = blocksAvailable.getFront();
 
         //storing the character in the hardDrive at index position 
         hardDrive[index] = contents[i];

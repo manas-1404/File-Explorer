@@ -1,6 +1,13 @@
 #ifndef FILESYSTEM_SRINIVASGOWDA_H
 #define FILESYSTEM_SRINIVASGOWDA_H
 
+/*
+Name: Manas Srinivas Gowda
+ASU ID: 1225612596
+Date: 19 February 2024
+Description: This header file is the class declaration of File and FileManager Classes
+*/ 
+
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -8,8 +15,6 @@
 
 #include "LinkedList_srinivasgowda.hpp"
 #include "Queue_srinivasgowda.hpp"
-// #include "FileSystem_srinivasgowda.cpp"
-
 
 class File {
 private:
@@ -21,7 +26,6 @@ public:
     File(string newFileName); 
     string getFileName(); 
     void addBlock(int index);
-    // void removeBlock(int index);
     int fileSize(); 
     LinkedList<int>* getFileBlocks();
     bool operator==(const File &other) const;
@@ -40,7 +44,6 @@ public:
     string readFile(string name);
     int getfileSizes(string name);
     vector<string> getFileNames();
-    // vector<int> getFileSizes();
 
 protected:
     File findFileByName(string name);

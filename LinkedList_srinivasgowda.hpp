@@ -1,13 +1,20 @@
 #ifndef LINKEDLIST_SRINIVASGOWDA_HPP
 #define LINKEDLIST_SRINIVASGOWDA_HPP
 
-#include <string>
-#include <iostream>                     // Include the I/O stream library
-#include <stdexcept>                    // Include the exception library
+/*
+Name: Manas Srinivas Gowda
+ASU ID: 1225612596
+Date: 19 February 2024
+Description: This class is the implementation of LinkedList Class and contains all the required methods
+*/ 
+
+#include <string>                               //Include the string library
+#include <iostream>                             //Include the I/O stream library
+#include <stdexcept>                            //Include the exception library
 
 #include "FileSystem_srinivasgowda.h"
 
-using namespace std;                    // Correct syntax to use the std namespace
+using namespace std;                            // Correct syntax to use the std namespace
 
 //Declaring a templated Class Node
 template<typename T> class Node {
@@ -43,27 +50,22 @@ public:
 
 template<typename T> class LinkedList{
 
+//properties of LinkedList class are made private
 private:
     int count;
     Node<T>* head;
-    // Node<T>* tail;
 
+//methods of LinkedList class are made public
 public:
     LinkedList(){
         count = 0;
         head = NULL;
-        // tail = nullptr;
     }
 
     //Method which will return the head of the linkedlist. const because we don't want to change any data structure of the returned pointer
     Node<T>* getHead() const{
         return head;
     }
-
-    // string getFileNameData(){
-
-    // }
-
 
     //Method which will add new data to the Node
     void add(T data){
@@ -72,11 +74,9 @@ public:
         
         //if head = null, then the Node is empty initially 
         if(head == NULL){
-
             newNode->setNext(head);                            //pointing newNode.next to head
             head = newNode;                                    //pointing head to newNode
-            // tail = head;
-            count++;                                            //increasing count by 1, because we just added an data
+            count++;                                           //increasing count by 1, because we just added an data
         }
 
         //Node not empty, so add the next data to the end
@@ -95,8 +95,9 @@ public:
     }
 
 
-    //Method which will pick a random node and remove it and return the contents of that node. Basically, getting an data out of the Node
+    //Method which will remove the node of T data
     void remove(T data){
+
         //checking if the Node is empty. 
         if (count == 0){
             //Node is empty so we can't remove any data. Throw a runtime error with a message for User
@@ -108,11 +109,12 @@ public:
         //initializing index which gives the index of the node where the data is present
         int index = getIndexOf(data);
 
+        //if index is negative, then the data is not present
         if(index == -1){
-            throw std::runtime_error("FIle not found.");
+            throw std::runtime_error("data not found.");
         }
 
-        //File is found
+        //data is found
         Node<T> *removedNode = nullptr;                         //initializing and pointing removedNode to null
 
         //If index = 0, then we technically removing the first data
@@ -128,7 +130,7 @@ public:
             //Trying to find the node just before the one to remove
             //SKipping 0th iteration with i = 1, because temp is already pointing to head and we don't need to consider that iteration
             for (int i = 1; i < index; i++){ 
-                temp = temp->getNext();                         //pointing temp to temp.next, because we need to iterate through the Singly LinkedList
+                temp = temp->getNext();                         //pointing temp to temp.next, because we need to iterate through the LinkedList
             }
 
             removedNode = temp->getNext();                      //pointing removedNode to temp.next
@@ -162,8 +164,8 @@ public:
         
         //keep iterating till head is not pointing to null
         while (head != nullptr){
-            Node<T>* temp = head;                              //initializing a temp node and pointing it to head, this temp will be used to delete the node after moving the head forward in the linkedlist
-            head = head->getNext();                           //pointing head to next node by getting next node. basically, moving forward in the linkedlist
+            Node<T>* temp = head;                               //initializing a temp node and pointing it to head, this temp will be used to delete the node after moving the head forward in the linkedlist
+            head = head->getNext();                             //pointing head to next node by getting next node. basically, moving forward in the linkedlist
             temp->setNext(nullptr);                             //pointing temp.next to null
             delete temp;                                        //deleting the temp node. basically the former head node
         }
@@ -172,26 +174,26 @@ public:
         head = nullptr;                                        
     }
 
+    //Method which will return the index of the T data in the linkedlist
     int getIndexOf(T data){
-        int i = 0;
+        int i = 0;                                              //initializing i index to 0
         
-        Node<T>* temp = head;
+        Node<T>* temp = head;                                   //initializing a temp node and pointing it to head, this temp will be used to traverse the node
 
+        //keep iterating till temp is not pointing to null
         while(temp != nullptr){
+
+            //checking if the temp data matches the data we need
             if(temp->getData() == data){
-                return i;
+                return i;                                       //return the index i;
             }
 
-            temp = temp->getNext();
-            i++;
+            temp = temp->getNext();                             //pointing temp to temp.next, because we need to iterate through the Singly LinkedList Node
+            i++;                                                //increasing the index i by 1 after every iteration
         }
 
-        return -1;
+        return -1;                                              //return -1 because the T data is not found
     }
-
-
 };
-
-
 
 #endif

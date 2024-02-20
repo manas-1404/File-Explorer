@@ -4,9 +4,15 @@
 #include <string>                                           //Include the string library
 #include <string.h>                                         //Include the string.h library
 
-// include FileSystem Header File
-#include "FileSystem_srinivasgowda.h"
+/*
+Name: Manas Srinivas Gowda
+ASU ID: 1225612596
+Date: 19 February 2024
+Description: This class is the implementation of File and FileManager Classes and contains all the required methods
+*/ 
 
+//include FileSystem Header File
+#include "FileSystem_srinivasgowda.h"
 
 using namespace std;                                        //Correct syntax to use the std namespace
 
@@ -79,8 +85,8 @@ void FileManager::addFile(string name, string contents){
     //for loop to traverse through each and every character in the string contents
     for (int i = 0; i < static_cast<int>(contents.length()); i++){
 
-        //storing the available index with the peek Queue method
-        index = blocksAvailable.peek();
+        //storing the available index with the front Queue method
+        index = blocksAvailable.front();
 
         //storing the character in the hardDrive at index position 
         hardDrive[index] = contents[i];

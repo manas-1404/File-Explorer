@@ -1,3 +1,7 @@
+# Name: Manas Srinivas Gowda
+# ASU ID: 1225612596
+# Date: 19 February 2024
+
 CXX = g++
 CXXFLAGS = -Wall -g
 

@@ -113,93 +113,115 @@ void FileManager::deleteFile(string name){
     //Iterating through the Linkedlist  till we find the last element
     while(temp != nullptr){
 
-        //storing the index of the 
+        //storing the index of the current character
         index = temp->getData();
+
+        //enqueue the index so that it is free for future use
         blocksAvailable.enqueue(index);
+
+        //pointing temp to temp.next, because we need to iterate through the LinkedList
         temp = temp->getNext();
     }
 
+    //remove the File object from the FIleManager Linkedlist
     files->remove(fileToDelete);
 }
 
-string FileManager::readFile(string name)
-{
-    string text = "";
-    int index;
+//Method that looks up a file and return the contents of that file
+string FileManager::readFile(string name){
+    
+    string text = "";                        //initializing text to read
+    int index;                               //initializing index of HardDrive
 
+    //Finding the file object which needs to be read
     File fileToRead = findFileByName(name);
 
+    //retrieving the LinkedList containing the indexes which points to the characters that make up the file contents
     LinkedList<int>* fileIndexes = fileToRead.getFileBlocks();
 
+    //Accessing the head of the linkedlist
     Node<int>* temp = fileIndexes->getHead();
 
+    //Iterating through the Linkedlist till we find the file to be read 
     while(temp != nullptr){
+
+        //storing the index of the current character
         index = temp->getData();
+
+        //concatenating the text character by character
         text = text + hardDrive[index];
+
+        //pointing temp to temp.next, because we need to iterate through the LinkedList
         temp = temp->getNext();
     }
 
+    //return the file contents back to the calling function
     return text;
 }
 
-vector<string> FileManager::getFileNames()
-{
-    vector<string> vectorNames;
+//Method that gets all the file names out as a vector
+vector<string> FileManager::getFileNames(){
 
+    vector<string> vectorNames;                            //initializing a vector of type string which will store all the file names as a vector
+
+    //Accessing the head of the linkedlist
     Node<File>* temp = files->getHead();
 
+    //Iterating through the Linkedlist till we find the file to be read
     while (temp != nullptr){
+
+        //appending the names to the vector 
         vectorNames.push_back(temp->getData().getFileName());
+
+        //pointing temp to temp.next, because we need to iterate through the LinkedList
         temp = temp->getNext();
     }
 
+    //return the names in the form of a vector
     return vectorNames;
 }
 
+//Method that returns the size of a file
 int FileManager::getfileSizes(string name){
+
+    //Finding the file object which needs to be found
     File searchFile = findFileByName(name);
 
+    //Storing the file size by using the fileSize() method
     int index = searchFile.fileSize();
 
+    //return the index back
     return index;
 }
 
-// vector<int> FileManager::getFileSizes()
-// {
-//     vector<int> vectorSizes;
+//Method to search for a File object and return it
+File FileManager::findFileByName(string name) {
 
-//     Node<File>* temp = files->getHead();
+    int flag = -1;                                      //initializing the flag tp -1
+    File searchFile;                                    //initializing searchFile
+    Node<File>* temp = files->getHead();                //Accessing the head of the linkedlist
 
-//     while (temp != nullptr){
-//         vectorSizes.push_back(temp->getData().fileSize());
-//         temp = temp->getNext();
-//     }
+    //Iterating through the Linkedlist till we find the file to be read
+    while (temp != nullptr){
 
-//     return vectorSizes;
-// }
+        //checking the name of the current file is actually what we are looking for
+        if (temp->getData().getFileName() == name){
 
-File FileManager::findFileByName(string name)
-{
-    int flag = -1;
-    File searchFile;
-    Node<File>* temp = files->getHead();
-
-    while (temp != nullptr)
-    {
-        if (temp->getData().getFileName() == name)
-        {
+            //storing file object in searchFile
             searchFile = temp->getData();
-            flag = 1;
-            break;
+            flag = 1;                                   //setting flag to 1
+            break;                                      //break the while loop
         }
 
+        //pointing temp to temp.next, because we need to iterate through the LinkedList
         temp = temp->getNext();
     }
 
+    //File is not found if flag remains -1
     if(flag == -1){
         throw std::runtime_error("File Not Found");
     }
 
+    //returning the found file
     return searchFile;
-    
 }

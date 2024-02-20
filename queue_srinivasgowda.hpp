@@ -113,7 +113,7 @@ public:
     }
 
     //Method which will return the first element of the Queue
-    T front(){
+    T getFront(){
         return front->getItem();                                        //return the data of the first element of the queue
     }
 
